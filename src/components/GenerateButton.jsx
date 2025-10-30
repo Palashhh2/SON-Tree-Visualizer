@@ -1,11 +1,9 @@
-function GenerateButton({ onClick, disabled }) {
+import './GenerateButton.css'
+
+export default function GenerateButton({ onClick, disabled }) {
   return (
-    <button className="generate" onClick={onClick} disabled={disabled}>
+    <button className="generate-btn" onClick={onClick} disabled={disabled}>
       Generate Tree
     </button>
   )
 }
-
-export default GenerateButton
-
-

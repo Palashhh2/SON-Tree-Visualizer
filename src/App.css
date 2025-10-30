@@ -1,0 +1,99 @@
+
+.app-container {
+  min-height: 100vh;         /* fill viewport so dark bg covers page */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 16px;             /* page padding */
+  box-sizing: border-box;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* App inner wrapper to center content and limit width */
+.app-inner {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 32px);
+}
+
+/* Theme-specific CSS variables scoped under .app-container */
+.app-container.light {
+  --bg: #f9fafb;
+  --panel-bg: #ffffff;
+  --input-bg: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --accent: #3b82f6;
+  --shadow: rgba(2,6,23,0.06);
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.app-container.dark {
+  --bg: #0b1220;
+  --panel-bg: #0f1724;
+  --input-bg: #0b1220;
+  --text: #e6eef8;
+  --muted: #9ca3af;
+  --border: #1f2937;
+  --accent: #60a5fa;
+  --shadow: rgba(0,0,0,0.6);
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+/* Main split layout */
+.main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  flex: 1;
+  margin-top: 12px;
+}
+
+/* Left / right panels */
+.left-panel, .right-panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 4px 12px var(--shadow);
+  box-sizing: border-box;
+}
+
+/* search + tree container specifics */
+.visual-top {
+  margin-bottom: 12px;
+}
+
+/* tree wrap */
+.tree-wrap {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  height: calc(60vh - 40px);
+  overflow: auto;
+}
+
+/* footer */
+.footer {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  padding: 12px;
+}
+.error {
+  color: #ef4444;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 920px) {
+  .main { grid-template-columns: 1fr; }
+  .tree-wrap { height: 50vh; }
+}

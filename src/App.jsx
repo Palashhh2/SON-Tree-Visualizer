@@ -4,6 +4,7 @@ import JsonInput from './components/JsonInput.jsx'
 import SearchBar from './components/SearchBar.jsx'
 import JsonTree from './components/JsonTree.jsx'
 import GenerateButton from './components/GenerateButton.jsx'
+import './App.css'
 
 function App() {
   const [theme, setTheme] = useState('light')
@@ -16,7 +17,8 @@ function App() {
     document.documentElement.setAttribute('data-theme', theme)
   }, [theme])
 
-  const handleToggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'))
+  const handleToggleTheme = () =>
+    setTheme((t) => (t === 'light' ? 'dark' : 'light'))
 
   const handleGenerate = () => {
     setError('')
@@ -32,26 +34,33 @@ function App() {
   const isGenerateDisabled = useMemo(() => !rawJson.trim(), [rawJson])
 
   return (
-    <div className="page">
-      <Navbar theme={theme} onToggleTheme={handleToggleTheme} />
+    <div className={`app-container ${theme}`}>
+      <div className="app-inner">
+        <Navbar theme={theme} onToggleTheme={handleToggleTheme} />
 
-      <main className="main">
-        <div className="main__left">
-          <JsonInput value={rawJson} onChange={setRawJson} />
-        </div>
-
-        <div className="main__right">
-          <SearchBar value={search} onChange={setSearch} />
-          <div className="tree-wrap">
-            <JsonTree data={treeData} query={search} />
+        <main className="main">
+          <div className="left-panel">
+            <JsonInput value={rawJson} onChange={setRawJson} />
           </div>
-          {error && <div className="error">{error}</div>}
-        </div>
-      </main>
 
-      <footer className="footer">
-        <GenerateButton onClick={handleGenerate} disabled={isGenerateDisabled} />
-      </footer>
+          <div className="right-panel">
+            <div className="visual-top">
+              <SearchBar value={search} onChange={setSearch} />
+            </div>
+            <div className="tree-wrap">
+              <JsonTree data={treeData} query={search} />
+            </div>
+            {error && <div className="error">{error}</div>}
+          </div>
+        </main>
+
+        <footer className="footer">
+          <GenerateButton
+            onClick={handleGenerate}
+            disabled={isGenerateDisabled}
+          />
+        </footer>
+      </div>
     </div>
   )
 }

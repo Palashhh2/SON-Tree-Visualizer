@@ -1,3 +1,4 @@
+import './JsonTree.css'
 import { useState } from 'react'
 
 function JsonTree({ data, query }) {
@@ -22,15 +23,23 @@ function JsonTree({ data, query }) {
     if (!isObject) {
       return (
         <div className="tree__item">
-          <span className="tree__key">{k}:</span> <span className="tree__value">{String(v)}</span>
+          <span className="tree__key">{k}:</span>{' '}
+          <span className="tree__value">{String(v)}</span>
         </div>
       )
     }
 
-    const entries = Array.isArray(v) ? v.map((val, idx) => [idx, val]) : Object.entries(v)
+    const entries = Array.isArray(v)
+      ? v.map((val, idx) => [idx, val])
+      : Object.entries(v)
+
     return (
       <div className="tree__branch">
-        <button className="tree__toggle" onClick={() => setOpen(!open)} aria-label="toggle">
+        <button
+          className="tree__toggle"
+          onClick={() => setOpen(!open)}
+          aria-label="toggle"
+        >
           {open ? '▾' : '▸'}
         </button>
         <span className="tree__key">{k}</span>
@@ -45,23 +54,25 @@ function JsonTree({ data, query }) {
     )
   }
 
-  if (data == null || data === '') {
-    return <div className="tree tree--empty">No data</div>
+  if (!data) {
+    return <div className="tree-empty">No data</div>
   }
+
   const rootIsObject = typeof data === 'object' && data !== null
   if (!rootIsObject) {
     return (
-      <div className="tree">
+      <div className="tree-flow">
         <Node k="value" v={data} path={['value']} />
       </div>
     )
   }
+
   const rootEntries = Array.isArray(data)
     ? data.map((val, idx) => [idx, val])
     : Object.entries(data)
 
   return (
-    <div className="tree">
+    <div className="tree-flow">
       {rootEntries.map(([k, v]) => (
         <Node key={String(k)} k={k} v={v} path={[k]} />
       ))}
@@ -70,5 +81,3 @@ function JsonTree({ data, query }) {
 }
 
 export default JsonTree
-
-

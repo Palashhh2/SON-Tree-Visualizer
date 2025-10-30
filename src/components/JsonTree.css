@@ -1,0 +1,28 @@
+.tree-flow {
+  width: 100%;
+  height: 65vh;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel-bg);
+}
+
+.tree-empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 30px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+}
+
+/* Node colors*/
+.app-container.light {
+  --node-object-bg: #7caff1;
+  --node-array-bg: #d1b442;
+  --node-value-bg: #6aee98;
+}
+
+.app-container.dark {
+  --node-object-bg: #1e3a8a;
+  --node-array-bg: #78350f;
+  --node-value-bg: #14532d;
+}

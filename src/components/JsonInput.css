@@ -1,0 +1,46 @@
+.json-input-root {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.json-textarea-wrapper {
+  position: relative;
+}
+
+.json-textarea {
+  width: 100%;
+  min-height: 50vh;
+  background: var(--input-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 40px 10px 10px;
+  resize: vertical;
+  font-family: ui-monospace, monospace;
+  box-sizing: border-box;
+}
+
+.json-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+.json-clear-btn {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.json-clear-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
