@@ -18,7 +18,7 @@ Easily visualize your JSON data as a hierarchical tree with clear parent-child c
 
 ## 🖼️ Demo
 
-🔗 **Live Site:** [View on GitHub Pages](https://github.com/Palashhh2/SON-Tree-Visualizer.git)
+🔗 **Live Site:** [View on GitHub Pages](https://palashhh2.github.io/SON-Tree-Visualizer/)
 
 ---
 
