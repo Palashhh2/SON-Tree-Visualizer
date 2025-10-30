@@ -1,83 +1,81 @@
+import { useMemo } from 'react'
+import ReactFlow, { Background } from 'reactflow'
+import 'reactflow/dist/style.css'
 import './JsonTree.css'
-import { useState } from 'react'
 
-function JsonTree({ data, query }) {
-  const lowerQuery = query.trim().toLowerCase()
+export default function JsonTree({ data, searchTerm }) {
+  const { nodes, edges } = useMemo(() => {
+    if (!data || typeof data !== 'object') return { nodes: [], edges: [] }
 
-  function matches(value) {
-    if (!lowerQuery) return true
-    try {
-      const text = typeof value === 'string' ? value : JSON.stringify(value)
-      return text.toLowerCase().includes(lowerQuery)
-    } catch {
-      return false
+    const nodes = []
+    const edges = []
+    let id = 1
+    const lowerSearch = searchTerm?.toLowerCase() || ''
+
+    const makeNode = (key, value, parent = null, depth = 0) => {
+      const nodeId = `n-${id++}`
+      const isObj = value && typeof value === 'object'
+      const isArr = Array.isArray(value)
+      const baseLabel = isObj ? `${key} {}` : isArr ? `${key} []` : `${key}: ${String(value)}`
+      const isMatch =
+        lowerSearch &&
+        baseLabel.toLowerCase().includes(lowerSearch)
+
+      const bg = isMatch
+        ? 'rgba(129, 255, 11, 0.84)' // highlight
+        : isObj
+        ? 'var(--node-object-bg)'
+        : isArr
+        ? 'var(--node-array-bg)'
+        : 'var(--node-value-bg)'
+
+      nodes.push({
+        id: nodeId,
+        data: { label: baseLabel },
+        position: { x: depth * 250, y: id * 80 },
+        style: {
+          background: bg,
+          color: 'var(--text)',
+          border: '1px solid var(--border)',
+          borderRadius: 8,
+          padding: '6px 10px',
+          width: 180,
+          textAlign: 'center',
+          fontSize: 13,
+          boxShadow: '0 2px 6px var(--shadow)',
+          fontWeight: isMatch ? '600' : '400',
+        },
+      })
+
+      if (parent)
+        edges.push({
+          id: `e-${parent}-${nodeId}`,
+          source: parent,
+          target: nodeId,
+          type: 'straight',
+        })
+
+      if (isObj) Object.entries(value).forEach(([k, v]) => makeNode(k, v, nodeId, depth + 1))
+      else if (isArr) value.forEach((v, i) => makeNode(i, v, nodeId, depth + 1))
     }
-  }
 
-  function Node({ k, v, path }) {
-    const [open, setOpen] = useState(true)
-    const isObject = v && typeof v === 'object'
-    const show = matches(v) || (isObject && Object.values(v).some(matches))
-    if (!show) return null
+    makeNode('root', data)
+    return { nodes, edges }
+  }, [data, searchTerm])
 
-    if (!isObject) {
-      return (
-        <div className="tree__item">
-          <span className="tree__key">{k}:</span>{' '}
-          <span className="tree__value">{String(v)}</span>
-        </div>
-      )
-    }
-
-    const entries = Array.isArray(v)
-      ? v.map((val, idx) => [idx, val])
-      : Object.entries(v)
-
-    return (
-      <div className="tree__branch">
-        <button
-          className="tree__toggle"
-          onClick={() => setOpen(!open)}
-          aria-label="toggle"
-        >
-          {open ? '▾' : '▸'}
-        </button>
-        <span className="tree__key">{k}</span>
-        {open && (
-          <div className="tree__children">
-            {entries.map(([ck, cv]) => (
-              <Node key={String(ck)} k={ck} v={cv} path={[...path, ck]} />
-            ))}
-          </div>
-        )}
-      </div>
-    )
-  }
-
-  if (!data) {
-    return <div className="tree-empty">No data</div>
-  }
-
-  const rootIsObject = typeof data === 'object' && data !== null
-  if (!rootIsObject) {
-    return (
-      <div className="tree-flow">
-        <Node k="value" v={data} path={['value']} />
-      </div>
-    )
-  }
-
-  const rootEntries = Array.isArray(data)
-    ? data.map((val, idx) => [idx, val])
-    : Object.entries(data)
+  if (!data) return <div className="tree-empty">No data</div>
 
   return (
     <div className="tree-flow">
-      {rootEntries.map(([k, v]) => (
-        <Node key={String(k)} k={k} v={v} path={[k]} />
-      ))}
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        fitView
+        nodesConnectable={false}
+        defaultEdgeOptions={{ type: 'straight' }}
+      >
+        <Background />
+      </ReactFlow>
     </div>
   )
 }
-
-export default JsonTree

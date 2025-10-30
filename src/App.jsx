@@ -48,7 +48,7 @@ function App() {
               <SearchBar value={search} onChange={setSearch} />
             </div>
             <div className="tree-wrap">
-              <JsonTree data={treeData} query={search} />
+              <JsonTree data={treeData} searchTerm={search} />
             </div>
             {error && <div className="error">{error}</div>}
           </div>
